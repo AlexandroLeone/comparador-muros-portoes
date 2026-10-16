@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#172126" />
+  <title>Comparador de Muros e Portões</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <p class="eyebrow">ESTUDO DE FACHADA</p>
+        <h1>Muros &amp; Portões</h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="privacy"><i></i> Projeto privado</span>
+      <button class="btn btn-primary" id="openFormBtn">
+        <span aria-hidden="true">＋</span> Nova alternativa
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="workspace" aria-labelledby="alternativasTitle">
+      <div class="section-head">
+        <div>
+          <p class="section-index">01 / ALTERNATIVAS</p>
+          <h2 id="alternativasTitle">Estudo comparativo</h2>
+          <p class="intro">Organize as propostas e selecione até três para análise lado a lado.</p>
+        </div>
+        <div class="stats" aria-label="Resumo do projeto">
+          <div><strong id="optionCount">0</strong><span>opções</span></div>
+          <div><strong id="compareCount">0</strong><span>na análise</span></div>
+          <div><strong id="favoriteCount">0</strong><span>favorita</span></div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+          <span class="sr-only">Buscar alternativas</span>
+          <input id="searchInput" type="search" placeholder="Buscar por nome, material ou cor" />
+        </label>
+        <select id="gateFilter" aria-label="Filtrar por tipo de portão">
+          <option value="">Todos os portões</option>
+        </select>
+        <button class="btn btn-secondary" id="clearDataBtn" title="Restaurar os exemplos neutros">Restaurar exemplos</button>
+      </div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <div class="empty-icon">＋</div>
+        <h3>Nenhuma alternativa encontrada</h3>
+        <p>Adicione uma opção ou ajuste os filtros.</p>
+      </div>
+      <div class="cards" id="cardsGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="comparison" id="comparisonSection" aria-labelledby="comparisonTitle">
+      <div class="section-head compact">
+        <div>
+          <p class="section-index">02 / COMPARAÇÃO</p>
+          <h2 id="comparisonTitle">Análise lado a lado</h2>
+          <p class="intro" id="compareHint">Selecione pelo menos duas alternativas acima.</p>
+        </div>
+        <button class="btn btn-secondary" id="clearCompareBtn">Limpar seleção</button>
+      </div>
+      <div class="compare-empty" id="compareEmpty">
+        <div class="ruler" aria-hidden="true"></div>
+        <p>Use “Comparar” nos cartões para preencher esta prancha.</p>
+      </div>
+      <div class="compare-scroll" id="compareArea" hidden>
+        <table class="compare-table" id="compareTable"></table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="optionDialog">
+    <form id="optionForm" method="dialog">
+      <div class="modal-head">
+        <div>
+          <p class="section-index" id="formMode">NOVA ALTERNATIVA</p>
+          <h2 id="formTitle">Cadastrar proposta</h2>
+        </div>
+        <button class="icon-btn" type="button" id="closeDialogBtn" aria-label="Fechar">×</button>
+      </div>
+
+      <input type="hidden" id="optionId" />
+      <div class="form-grid">
+        <label class="field span-2">Nome da alternativa
+          <input id="name" maxlength="60" required placeholder="Ex.: Opção D — Linhas horizontais" />
+        </label>
+
+        <label class="field span-2">Imagem da fachada
+          <span class="upload-box" id="uploadBox">
+            <input id="image" type="file" accept="image/*" />
+            <span class="upload-icon">↥</span>
+            <strong>Escolher uma imagem</strong>
+            <small>JPG, PNG ou WEBP · opcional</small>
+            <span class="file-name" id="fileName"></span>
+          </span>
+        </label>
+
+        <label class="field">Material principal
+          <input id="material" maxlength="60" required placeholder="Ex.: Concreto aparente" />
+        </label>
+        <label class="field">Cor predominante
+          <span class="color-input">
+            <input id="colorHex" type="color" value="#747a78" aria-label="Selecionar cor" />
+            <input id="colorName" maxlength="40" required placeholder="Ex.: Cinza médio" />
+          </span>
+        </label>
+        <label class="field">Tipo de portão
+          <select id="gateType" required>
+            <option value="">Selecione</option>
+            <option>Deslizante</option>
+            <option>Basculante</option>
+            <option>Abrir em duas folhas</option>
+            <option>Articulado</option>
+            <option>Pedestre + veículo</option>
+            <option>Outro</option>
+          </select>
+        </label>
+        <label class="field">Nível de privacidade
+          <select id="privacyLevel" required>
+            <option>Alto</option>
+            <option selected>Médio</option>
+            <option>Baixo</option>
+          </select>
+        </label>
+        <label class="field span-2">Observações
+          <textarea id="notes" rows="4" maxlength="320" placeholder="Inclua acabamentos, iluminação, vegetação, custo estimado ou pontos a revisar."></textarea>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" id="cancelBtn">Cancelar</button>
+        <button class="btn btn-primary" type="submit">Salvar alternativa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="confirm-dialog" id="confirmDialog">
+    <form method="dialog">
+      <h2 id="confirmTitle">Confirmar ação</h2>
+      <p id="confirmMessage"></p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" value="cancel">Cancelar</button>
+        <button class="btn btn-danger" id="confirmActionBtn" value="confirm">Confirmar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
